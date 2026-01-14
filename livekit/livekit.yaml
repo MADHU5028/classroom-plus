@@ -1,0 +1,8 @@
+port: 7880
+rtc:
+  tcp_port: 7881
+  udp_port: 7882
+  use_external_ip: false
+
+keys:
+ classroomplus_dev_key: classroomplus_super_secret_key_1234567890
