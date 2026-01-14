@@ -1,10 +1,15 @@
 import "./Lobby.css";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Header from "../components/Header";
+import { useAuth } from "../context/AuthContext";
 
 export default function Lobby() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const meetingCode = id!;
+
+  const user = useAuth();
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -12,7 +17,6 @@ export default function Lobby() {
   const [micOn, setMicOn] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
   const [permissionError, setPermissionError] = useState(false);
-  const meetingCode = id!;
 
   useEffect(() => {
     const startMedia = async () => {
@@ -53,67 +57,82 @@ export default function Lobby() {
   };
 
   return (
-    <div className="lobby-root">
-      <div className="preview-section">
-        <div className="video-card">
-          {permissionError ? (
-            <div className="permission-text">
-              Camera or microphone access denied
+    <>
+      {/* ✅ SAME HEADER AS HOME */}
+      <Header />
+
+      <div className="lobby-root">
+        {/* LEFT – VIDEO */}
+        <div className="preview-section">
+          <div className="video-card">
+            {/* ✅ NAME INSIDE VIDEO */}
+            <div className="video-name">
+              {user?.displayName || "You"}
             </div>
-          ) : (
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              playsInline
-              className="video-preview"
-            />
-          )}
 
-          <div className="preview-controls">
-            <button
-              className={`circle-btn ${!micOn ? "off" : ""}`}
-              onClick={toggleMic}
-            >
-              Mic
-            </button>
+            {permissionError ? (
+              <div className="permission-text">
+                Camera or microphone access denied
+              </div>
+            ) : (
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                className="video-preview"
+              />
+            )}
 
-            <button
-              className={`circle-btn ${!cameraOn ? "off" : ""}`}
-              onClick={toggleCamera}
-            >
-              Camera
-            </button>
+            {/* CONTROLS */}
+            <div className="preview-controls">
+              <button
+                className={`control-btn ${!micOn ? "off" : ""}`}
+                onClick={toggleMic}
+              >
+                <span className="material-icons">
+                  {micOn ? "mic" : "mic_off"}
+                </span>
+              </button>
+
+              <button
+                className={`control-btn ${!cameraOn ? "off" : ""}`}
+                onClick={toggleCamera}
+              >
+                <span className="material-icons">
+                  {cameraOn ? "videocam" : "videocam_off"}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* RIGHT – JOIN */}
+        <div className="join-section">
+          <h2>Ready to join?</h2>
+
+          <div className="meeting-code-box">
+            <span className="label">Meeting code</span>
+            <div className="code-row">
+              <span className="code">{meetingCode}</span>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(meetingCode);
+                }}
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <button
+            className="join-btn"
+            onClick={() => navigate(`/meeting/${meetingCode}`)}
+          >
+            Join now
+          </button>
+        </div>
       </div>
-
-      <div className="join-section">
-  <h2>Ready to join?</h2>
-
-  <div className="meeting-code-box">
-    <span className="label">Meeting code</span>
-    <div className="code-row">
-      <span className="code">{meetingCode}</span>
-      <button
-        onClick={() => {
-          navigator.clipboard.writeText(meetingCode);
-          alert("Meeting code copied");
-        }}
-      >
-        Copy
-      </button>
-    </div>
-  </div>
-
-  <button
-    className="join-btn"
-    onClick={() => navigate(`/meeting/${meetingCode}`)}
-  >
-    Join now
-  </button>
-</div>
-
-    </div>
+    </>
   );
 }
