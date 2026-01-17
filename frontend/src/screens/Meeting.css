@@ -21,12 +21,14 @@
   flex: 1;
   display: flex;
   overflow: hidden;
+  height : 100%;
 }
 
 /* GRID */
 .meeting-grid {
   flex: 1;
   overflow: hidden;
+  height : 100%;
 }
 
 /* SPOTLIGHT MODE */
@@ -162,4 +164,18 @@ body,
 
 .footer-right button:hover {
   opacity: 0.8;
+}
+.raised-hand-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+}
+
+.raised-hand-chip {
+  background: #fbbc04;
+  padding: 6px 10px;
+  border-radius: 16px;
+  margin-bottom: 6px;
+  font-weight: 500;
 }
