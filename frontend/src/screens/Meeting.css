@@ -179,3 +179,17 @@ body,
   margin-bottom: 6px;
   font-weight: 500;
 }
+.end-meeting-btn {
+  background: #d93025;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 12px;
+}
+
+.end-meeting-btn:hover {
+  background: #b1271b;
+}
