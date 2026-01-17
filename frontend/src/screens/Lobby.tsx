@@ -8,16 +8,17 @@ export default function Lobby() {
   const navigate = useNavigate();
   const { id } = useParams();
   const meetingCode = id!;
-
   const user = useAuth();
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const [micOn, setMicOn] = useState(true);
-  const [cameraOn, setCameraOn] = useState(true);
+  // 🔒 PRIVACY SAFE DEFAULTS
+  const [micOn, setMicOn] = useState(false);
+  const [cameraOn, setCameraOn] = useState(false);
   const [permissionError, setPermissionError] = useState(false);
 
+  // 🎥 GET MEDIA ONCE (BEST PRACTICE)
   useEffect(() => {
     const startMedia = async () => {
       try {
@@ -27,6 +28,16 @@ export default function Lobby() {
         });
 
         streamRef.current = stream;
+
+        // 🔐 Apply initial OFF state
+        stream.getAudioTracks().forEach(track => {
+          track.enabled = micOn;
+        });
+
+        stream.getVideoTracks().forEach(track => {
+          track.enabled = cameraOn;
+        });
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
@@ -42,30 +53,32 @@ export default function Lobby() {
     };
   }, []);
 
+  // 🎤 TOGGLE MIC
   const toggleMic = () => {
     streamRef.current?.getAudioTracks().forEach(track => {
       track.enabled = !micOn;
     });
-    setMicOn(!micOn);
+    setMicOn(prev => !prev);
   };
 
+  // 📷 TOGGLE CAMERA
   const toggleCamera = () => {
     streamRef.current?.getVideoTracks().forEach(track => {
       track.enabled = !cameraOn;
     });
-    setCameraOn(!cameraOn);
+    setCameraOn(prev => !prev);
   };
 
   return (
     <>
-      {/* ✅ SAME HEADER AS HOME */}
+      {/* HEADER */}
       <Header />
 
       <div className="lobby-root">
-        {/* LEFT – VIDEO */}
+        {/* LEFT – VIDEO PREVIEW */}
         <div className="preview-section">
           <div className="video-card">
-            {/* ✅ NAME INSIDE VIDEO */}
+            {/* USER NAME */}
             <div className="video-name">
               {user?.displayName || "You"}
             </div>
@@ -84,7 +97,7 @@ export default function Lobby() {
               />
             )}
 
-            {/* CONTROLS */}
+            {/* PREVIEW CONTROLS */}
             <div className="preview-controls">
               <button
                 className={`control-btn ${!micOn ? "off" : ""}`}
@@ -116,9 +129,9 @@ export default function Lobby() {
             <div className="code-row">
               <span className="code">{meetingCode}</span>
               <button
-                onClick={() => {
-                  navigator.clipboard.writeText(meetingCode);
-                }}
+                onClick={() =>
+                  navigator.clipboard.writeText(meetingCode)
+                }
               >
                 Copy
               </button>
@@ -127,7 +140,14 @@ export default function Lobby() {
 
           <button
             className="join-btn"
-            onClick={() => navigate(`/meeting/${meetingCode}`)}
+            onClick={() =>
+              navigate(`/meeting/${meetingCode}`, {
+                state: {
+                  micOn,
+                  cameraOn,
+                },
+              })
+            }
           >
             Join now
           </button>

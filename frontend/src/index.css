@@ -24,13 +24,32 @@ a:hover {
 }
 
 /* 🔥 FIXED BODY */
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
+/* 🔒 GLOBAL HARD STOP SCROLL */
+html,
+body,
+#root {
   height: 100%;
+  margin: 0;
   overflow: hidden;
 }
+
+/* 🔒 KILL LIVEKIT INTERNAL SCROLL */
+.lk-room,
+.lk-video-conference,
+.lk-grid-layout,
+.lk-focus-layout,
+.lk-stage,
+.lk-stage-container {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* REMOVE LIVEKIT DEFAULT PADDING */
+.lk-video-conference {
+  padding: 0 !important;
+}
+
 
 /* ROOT */
 #root {

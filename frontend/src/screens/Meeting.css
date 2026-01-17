@@ -1,40 +1,124 @@
-/* FULLSCREEN ROOT */
+/* ROOT */
 .meeting-root {
-  width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
   background: #111;
+  overflow: hidden;
 }
 
 /* LIVEKIT WRAPPER */
 .livekit-room {
-  width: 100%;
-  height: 100%;
-  overflow: hidden !important;
-}
-
-/* LAYOUT: GRID + CONTROLS */
-.meeting-layout {
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* VIDEO GRID */
+/* VIDEO STAGE */
+.video-stage {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* GRID */
 .meeting-grid {
   flex: 1;
   overflow: hidden;
 }
 
-/* LIVEKIT CONTROL BAR */
-.meeting-controls {
+/* SPOTLIGHT MODE */
+.spotlight {
+  flex: 3;
+}
+
+.side-grid {
+  flex: 1;
+}
+
+/* SIDE PANEL */
+.side-panel {
+  width: 320px;
+  background: #111;
+  border-left: 1px solid #222;
+  height: 100%;
+}
+
+/* FOOTER */
+.meeting-footer {
   height: 72px;
   flex-shrink: 0;
   background: #000;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  color: #fff;
 }
 
-/* FORCE LIVEKIT TO NOT SCROLL */
+/* FOOTER SECTIONS */
+.footer-left {
+  flex: 1;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.footer-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* LIVEKIT CONTROL BAR */
+.footer-center .lk-control-bar {
+  background: transparent;
+  border: none;
+}
+
+/* ACTIVE SPEAKER */
+.lk-participant-tile.lk-speaking {
+  outline: 3px solid #1a73e8;
+  outline-offset: -3px;
+  border-radius: 12px;
+}
+
+/* NAME OVERLAY */
+.lk-participant-name {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* CAMERA OFF */
+.lk-participant-placeholder {
+  background: #202124;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 🔒 GLOBAL HARD STOP SCROLL */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* 🔒 KILL LIVEKIT INTERNAL SCROLL */
 .lk-room,
 .lk-video-conference,
 .lk-grid-layout,
@@ -46,37 +130,36 @@
   overflow: hidden !important;
 }
 
-/* REMOVE DEFAULT PADDING */
+/* REMOVE LIVEKIT DEFAULT PADDING */
 .lk-video-conference {
-  padding: 0 !important;
+  padding: 0;
+  
 }
-
-/* LOADING */
-.meeting-loading {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* RIGHT SIDE PANEL */
+.side-panel {
+  width: 320px;
   background: #111;
-  color: white;
-}
-/* LIVEKIT CONTROL BAR FIX */
-.lk-control-bar {
-  background: #000 !important;
-  border-top: 1px solid #222;
-  z-index: 10;
+  border-left: 1px solid #222;
+  padding: 16px;
+  color: #fff;
 }
 
-/* ICONS */
-.lk-control-bar button,
-.lk-control-bar span,
-.lk-control-bar svg {
-  color: #fff !important;
-  fill: #fff !important;
+/* PARTICIPANT LIST */
+.participant-row {
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #222;
 }
 
-/* HOVER */
-.lk-control-bar button:hover {
-  background: rgba(255, 255, 255, 0.12);
+/* FOOTER RIGHT BUTTONS */
+.footer-right button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.footer-right button:hover {
+  opacity: 0.8;
 }
